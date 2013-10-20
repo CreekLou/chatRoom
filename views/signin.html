@@ -1,0 +1,55 @@
+<html>
+<head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+      <link rel="stylesheet" href="/javascripts/jquery.mobile-1.3.0/demos/css/themes/default/jquery.mobile-1.3.0.css" />
+		  <link rel="stylesheet" href="/javascripts/jquery.mobile-1.3.0/demos/docs/examples/listviews/grid-listview.css">
+      <script src="/javascripts/jquery.mobile-1.3.0/demos/js/jquery.js"></script>
+      <script src="/javascripts/jquery.mobile-1.3.0/demos/js/jquery.mobile-1.3.0.js"></script>
+</head>
+<body>
+  <div data-role="page" data-theme="a">
+    <div data-role="header">
+      <h1>聊天室</h1>
+    </div>
+    <div data-role="content">
+      <div id="contenting">
+        <div class="form_line">
+          <div class="form_label">昵称：</div>
+          <input type="text" name="name" id="name" />
+        </div>
+            <fieldset class="ui-grid-a">
+              <div class="ui-block-a">
+                  <button class="button gray" type="button" id="login">登录</button>
+              </div>
+              <div class="ui-block-b">
+                  <button class="button gray" type="reset">取消</button>
+              </div>
+          </fieldset>
+      </div>
+    </div>
+  </div>
+  <script>
+  $('#login').click(function (e) {
+    var strings =$('#name').val();
+    if (strings.replace(/(^\s*)|(\s*$)/g, "").length ==0)
+    {
+        alert('用戶名不能为空');
+    }else{
+      $.post('/signin',{name : $('#name').val()},function(data, status){
+      if(status == 'success')
+      {
+        if(data.errorCode == 0)
+        {
+          window.location.href = '/';
+        }else{
+          window.location.href = '/signin'
+          alert("用戶名已存在，换个名字试试吧");
+        }
+      }
+    });
+  }
+  });
+  </script>
+</body>
+</html>

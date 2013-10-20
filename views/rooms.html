@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <link rel="stylesheet" href="/javascripts/jquery.mobile-1.3.0/demos/css/themes/default/jquery.mobile-1.3.0.css" />
+  <link rel="stylesheet" href="/javascripts/jquery.mobile-1.3.0/demos/docs/examples/listviews/grid-listview.css">
+  <script src="/javascripts/jquery.mobile-1.3.0/demos/js/jquery.js"></script>
+  <script src="/javascripts/jquery.mobile-1.3.0/demos/js/jquery.mobile-1.3.0.js"></script>
+
+  <script type="text/javascript" src="javascripts/jquery.min.js"></script>
+  <script type="text/javascript" src="javascripts/jquery.cookie.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="text/javascript" src="/javascripts/chat.js"></script>
+  <script language="JavaScript">
+         //javascript:window.history.forward(1);
+         console.log("xxxxxxxxxxxxxxx");
+</script>
+  <script>
+      /*$(document).ready(function(){        
+        /*now.receiveMessage = function(name, message){
+          $("#incomingMessages").append("<div class='message'><span class='username'>" + name + ":</span> " + message + "</div>");
+          $("#incomingMessages").scrollTop($("#incomingMessages")[0].scrollHeight);
+        }*/
+     /*$('#login').click(function (e) {
+        $.post('/signin',{name : $('#name').val()},function(data, status){
+          if(status == 'success')
+          {
+            if(data.errorCode == 0)
+            {
+            window.location.href = '/index/';
+            //$(location).attr('href',"#home");
+            }
+          }
+        });
+      });*/
+        /*$("#chatNameButton").click(function(){
+          var chatName = $("#chatNameText").val().trim();
+          if(chatName.length <= 0)
+            chatName = "unknown";
+          now.name = chatName;
+          $(location).attr('href',"#home");
+        });*/
+         
+        /*$("#chatSendButton").click(function(){
+          now.distributeMessage($("#messageText").val());
+          $("#messageText").val("");
+        });
+         
+      });*/
+    </script>
+  <style>
+      .message
+      {
+        padding: 5px 5px 5px 5px;
+      }
+      .username
+      {
+        font-weight: strong;
+        color: #0f0;
+      }
+      .msgContainerDiv
+      {
+        overflow-y: auto;
+        height: 250px;
+      }
+      .sayingto{
+        background: #ddd;
+        background: rgba(0,0,0,0.3);
+        border-radius: 8px;
+        color: #39F;
+      }
+      .fromDIV{
+        color:yellow;
+      }
+      .box_relative {
+        position: relative;
+        right: 200px;
+        top: 200px;
+      }
+    </style>
+</head>
+<body>
+  <div data-role="page" id="home" data-theme="a" id="demo-page" class="my-page" >
+    <div data-role="header">
+      <h1  style="color: white; font-family: Helvetica,Arial,sans-serif; font-weight: bold;">聊天大厅</h1>
+    </div>
+    <div data-role="content">
+      <ul data-role="listview" id="content1" data-inset="true">
+        <li>
+          <a href="#chatPage"  id='room1' data-transition="flip">
+            <img src="/javascripts/image/1.gif">
+            <h1 style="bottom:8%">交友吧</h1>
+            <p style="min-height:5%">旅行 吃货 <span  style="float:right;">在线<span id="room1_no" class="fromDIV"></span>人</span></p> 
+          </a>
+        </li>
+        <li>
+          <a href="#chatPage"  id = "room2" data-transition="pop">
+            <img src="/javascripts/image/bus.png">
+            <h1 style="bottom:8%">同乡会</h1>
+            <p style="min-height:5%">拼车 同行<span  style="float:right;">在线<span id="room2_no" class="fromDIV"></span>人</span></p>
+          </a>
+        </li>
+        <li>
+          <a href="#chatPage" id = "room3" data-transition="fade">
+            <img src="/javascripts/image/z.png">
+            <h1 style="bottom:8%">追星族</h1>
+            <p style="min-height:5%">明星 娱乐<span  style="float:right;">在线<span id="room3_no" class="fromDIV"></span>人</span></p>
+          </a>
+        </li>
+        <li>
+          <a href="#chatPage" id = "room4" data-transition="slidedown">
+            <img src="/javascripts/image/q.jpg">
+            <h1 style="bottom:8%">体育迷</h1>
+            <p style="min-height:5%">足球 篮球<span  style="float:right;">在线<span id="room4_no" class="fromDIV"></span>人</span></p>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <!-- /content -->
+    <div data-role="footer" data-theme="none">
+      <h3>中科院信息工程所</h3>
+    </div>
+    <!-- /footer --> </div>
+  <!-- /page -->
+
+  <div data-role="page" id="chatPage" data-theme="a">
+    <div data-role="header" data-add-back-btn="true" data-back-btn-text="rooms">
+      <a href="#home" id="backhome" data-icon="back">Rooms</a>
+      <h1 id="roomname"></h1>
+    </div>
+
+    <div data-role="content">
+      <div id="contents" class="msgContainerDiv" ></div>
+      <!--<label for="messageText"> <strong>消息:</strong>
+      </label>-->
+      <!--<div id="sayingto">你好 <span id="from" class="fromDIV"></span> ，你正在对 <span id="to" class="fromDIV"></span> 说</div>-->
+      <table style="width:100%">
+                    <tr>
+                        <td style="text-align: left">
+                            <!--<a  data-role="button" id="play" data-inline="true" data-theme="a" data-icon="play">播放</a>-->
+                            <div id="sayingto">你好 <span id="from" class="fromDIV"></span> ，你正在对 <span id="to" class="fromDIV"></span> 说</div>
+                        </td>
+                        <td style="text-align: right">
+                            <select name="users" id="userList" data-inline="true" >
+                              <option value="all">
+                                all
+                              </option>
+                            </select>
+                        </td>
+                    </tr>
+      </table>
+      <div>
+      <textarea name="input_content" id="input_content" style="height: 100px;"></textarea>
+      </div>
+      <fieldset class="ui-grid-a">
+        <div class="ui-block-a">
+          <a href="#home" id="goBackButton" data-role="button">表情</a>
+        </div>
+        <div class="ui-block-b">
+          <input type="button" id="say" value="发送" />
+         </div>
+      </fieldset>
+    </div>
+  </div>
+<div id="ring" style="widht:0px; height:0px;"></div>
+</body>
+</html>
